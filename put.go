@@ -21,18 +21,28 @@ func PutServer(c *gin.Context) {
 	doClient := createDOClient(spec.Target.Token)
 
 	// Get the droplet
-	// ASSUMPTION: ID property on spec is the Droplet ID
-	droplet, _, err := doClient.Droplets.Get(c, spec.ID)
-	dropletExists := true
+	tag := "zeet-" + spec.ID
+	droplets, _, err := doClient.Droplets.ListByTag(c, tag, &godo.ListOptions{})
 	if err != nil {
-		// Check if the error is a not found error
-		log.Println(err)
-		if _, ok := err.(*godo.ErrorResponse); ok {
-			dropletExists = false
-		} else {
-			log.Fatal(err)
-		}
+		log.Fatal(err)
 	}
+	if len(droplets) == 0 {
+		// Create droplet and return creating. Once done creating, do we need to immediately start provisioning the docker compose thing?
+	} else {
+
+	}
+
+	// droplet, _, err := doClient.Droplets.Get(c, spec.ID)
+	// dropletExists := true
+	// if err != nil {
+	// 	// Check if the error is a not found error
+	// 	log.Println(err)
+	// 	if _, ok := err.(*godo.ErrorResponse); ok {
+	// 		dropletExists = false
+	// 	} else {
+	// 		log.Fatal(err)
+	// 	}
+	// }
 
 	if dropletExists {
 		if droplet.Status != "active" {

@@ -44,10 +44,9 @@ func GetServer(c *gin.Context) {
 
 	// Droplet exists and is active
 	// SSH into droplet and check status of commands
-	// c.JSON(http.StatusOK, Status{
-	// 	IPAddress:    droplet.IP,
-	// 	ServerStatus: "healthy",
-	// 	ExposedPorts: "8080",
-	// 	Compose:      "up",
-	// })
+	c.JSON(http.StatusOK, Status{
+		IPAddress:    droplet.Networks.V4[0].IPAddress,
+		ServerStatus: "healthy",
+		Compose:      "up",
+	})
 }
